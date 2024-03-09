@@ -1,0 +1,29 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+
+    <div class="d-flex flex-wrap">
+        {% for field in listings %}
+
+        <div class="card m-2" style="width: 18rem;">
+            {% if field.image_url %}
+                <img src="{{field.image_url}}" class="card-img-top" alt="{{field.title}}">
+            {% else %}
+                <img src="https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg" class="card-img-top" alt="{{field.title}}">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{field.title}}</h5>
+              <p class="card-text text-truncate">{{field.description}}</p>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item border-0">Current bid: <b>${{field.current_bid}}</b></li>
+              <li class="list-group-item" style="font-size: small;">Created at: {{field.created_at}}</li>
+            </ul>
+            <div class="card-body">
+              <a href="{% url 'listing' field.id %}" class="card-link">See more...</a>
+            </div>
+          </div>
+        {% endfor %}
+    </div>
+{% endblock %}
