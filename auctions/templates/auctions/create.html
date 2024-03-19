@@ -2,10 +2,10 @@
 
 {% block body %}
 
-    <form action="{% url 'create' %}" method="post" class="w-50" >
+    <form action="{% url 'create' %}" method="post">
         {{form}}
         {% csrf_token %}
-        <input type="submit" value="Create Listing" class="btn btn-primary mt-2">
+        <input class="btn btn-primary mt-2" type="submit" value="Create Listing">
     </form>
 
 {% endblock %}

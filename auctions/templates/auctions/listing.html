@@ -4,66 +4,75 @@
 
 {% block body %}
     <div>
+        <div class="listing_main">
+            <div class="img_listing_cont">
+                {% if item.image_url %}
+                    <img src="{{item.image_url}}" alt="{{item.title}}" class="img_listing">
+                {% else %}
+                    <img src="https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg" alt="no-photo" class="img_listing">
+                {% endif %}
+            </div>
+    
+            <div class="listing_main_section">
+                <div class="listing_title_cont">
+                    <h1 class="listing_title">{{item.title}}</h1>
+                    {% if user.is_authenticated %}
+                    <form action="{%url 'add_watchlist' item.id %}" method="post">
+                        {% csrf_token %}
+                        {% if in_watchlist %}
+                            <button class="watchlist_btn">Remove from watchlist</button>
+                        {% else %}
+                            <button class="watchlist_btn">Add to watch list</button>
+                        {% endif %}
+                    </form>
+                    {% endif %}
+                </div>
+                <p class="listing_desc">{{item.description}}</p>
+                <h4 class="current_bid">Current bid: <span style="font-weight: 500;">$ {{item.current_bid}}</span></h4>
+                {% if winner%}
+                    <h1>{{winner}}</h1>
+                {% endif %}
+                {% if bids %}
+                    <p>{{bids}} bid(s) so far.
+                        {% if bidder %}
+                            <span>Your bid is current bid</span>
+                        {% endif %}
+                    </p>
+                {% else %}
+                    <p>No bids yet</p>
+                {% endif %}
+        
+                {% if owner and is_active %}
+                    <form action="{% url 'close_bid' item.id%}" method="post">
+                        {% csrf_token %}
+                        <input class="close_bid" type="submit" value="Close bid">
+                    </form>
+                {% endif %}
+        
+                {% if user.is_authenticated %}
+                    {% if not owner and is_active %}
+                    <h4 style="margin-top: 10px;">Place a bid</h4>
+                    <form action="{% url 'add_bid' item.id %}" method="post" class="bid_field">
+                        {% csrf_token %}
+                        {{bid_form}}
+                        <input type="submit" value="Place bid">
+                    </form>
+                    {% endif %}
+                {% endif %}
+        
+                <h4 class="listing_details">Details</h4>
+                    <ul class="listing_points">
+                        <li>Listed by: {{item.creator}}</li>
+                        <li>Category: {{item.category}}</li>
+                    </ul>
+    
+            </div>
+
+        </div>
+
+        <hr style="margin-top: 10px;">
         {% if user.is_authenticated %}
-        <form action="{%url 'add_watchlist' item.id %}" method="post">
-            {% csrf_token %}
-            {% if in_watchlist %}
-                <button>Remove from watchlist</button>
-            {% else %}
-                <button>Add to watch list</button>
-            {% endif %}
-        </form>
-        {% endif %}
-        <h1>{{item.title}}</h1>
-        {% if item.image_url %}
-            <img class="rounded" style="max-width: 200px;" src="{{item.image_url}}" alt="{{item.title}}" >
-        {% else %}
-            <img class="rounded" style="max-width: 200px;" src="https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg" alt="no-photo">
-        {% endif %}
-        <p>{{item.description}}</p>
-        <h4>Current bid</h4>
-        {% if winner%}
-            <h1>{{winner}}</h1>
-        {% endif %}
-        <p>$ {{item.current_bid}}</p>
-        {% if bids %}
-            <p>{{bids}} bid(s) so far.</p>
-            {% if bidder %}
-                <p>Your bid is current bid</p>
-            {% endif %}
-        {% else %}
-            <p>No bids yet</p>
-        {% endif %}
-
-        {% if owner and is_active %}
-            <form action="{% url 'close_bid' item.id%}" method="post">
-                {% csrf_token %}
-                <input type="submit" value="Close bid">
-            </form>
-        {% else %}
-            <p>Auction has ended</p>
-        {% endif %}
-
-        {% if user.is_authenticated %}
-        {% if not owner and is_active %}
-
-        <h4>Place a bid</h4>
-        <form action="{% url 'add_bid' item.id %}" method="post">
-            {% csrf_token %}
-            {{bid_form}}
-            <input type="submit" value="Place bid">
-        </form>
-        {% endif %}
-        {% endif %}
-
-        <h4>Details</h4>
-            <ul>
-                <li>Listed by: {{item.creator}}</li>
-                <li>Category: {{item.category}}</li>
-            </ul>
-
-        {% if user.is_authenticated %}
-        <h4>add comment</h4>
+        <h2 class="add_comment">Add Comment</h2>
         <form action="{% url 'add_comment' item.id%}" method="post">
             {% csrf_token %}
             {{comment_form}}
@@ -71,8 +80,9 @@
         </form>
         {% endif %}
             
-        <h4>Comments</h4>
-        <ul>
+        <h2 class="comments">Comments</h2>
+
+        <ul class="comment_section">
             {% for comment in comments %}
                 <li>{{comment.content}}</li>
             {% empty %}

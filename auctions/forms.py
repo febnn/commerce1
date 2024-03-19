@@ -11,11 +11,11 @@ class ListingForm(forms.Form):
     starting_bid = forms.IntegerField(label='Staring bid')
     image_url = forms.URLField(label='Image Url', required=False)
     category = forms.ChoiceField(label='Choose category', choices=select_category)
-    
     def __init__(self, *args, **kwargs):
         super(ListingForm, self).__init__(*args, **kwargs)
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'form-control'
+
             
 class CommentForm(forms.Form):
     content = forms.CharField(label='', max_length=100)

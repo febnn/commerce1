@@ -1,11 +1,32 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <ul>
-        {% for item in watchlist %}
-            <li><a href="{% url 'listing' item.id %}">{{item.title}}</a></li>
+    <h2>Watchlist</h2>
+
+    <div class="listings_grid">
+        {% for field in watchlist %}
+
+        <div class="listing_cont">
+          <div class="img_cont">
+            {% if field.image_url %}
+                <img src="{{field.image_url}}" alt="{{field.title}}" class="index_img">
+            {% else %}
+                <img src="https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg" alt="{{field.title}}" class="index_img">
+            {% endif %}
+          </div>
+          <div class="listing_info">
+            <div>
+              <h5 class="index_title">{{field.title}}</h5>
+              <p class="index_desc">{{field.description}}</p>
+            </div>
+            
+              <p class="index_bid">Current bid: <b>${{field.current_bid}}</b></p>
+            
+              <a href="{% url 'listing' field.id %}">See more...</a>
+            
+          </div>
+            
+          </div>
         {% endfor %}
-
-    </ul>
-
+    </div>
 {% endblock %}
